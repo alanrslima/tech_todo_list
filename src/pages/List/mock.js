@@ -1,0 +1,38 @@
+export default [
+  {
+    id: 0,
+    name: 'Nome do item',
+    createdAt: undefined,
+    rememberDate: undefined,
+    favorite: false,
+    description: '',
+    concluded: false,
+  },
+  {
+    id: 2,
+    name: 'Nome do item',
+    createdAt: undefined,
+    rememberDate: undefined,
+    favorite: false,
+    description: '',
+    concluded: true,
+  },
+  {
+    id: 3,
+    name: 'Nome do item',
+    createdAt: undefined,
+    rememberDate: undefined,
+    favorite: false,
+    description: '',
+    concluded: true,
+  },
+  {
+    id: 4,
+    name: 'Nome do item',
+    createdAt: undefined,
+    rememberDate: undefined,
+    favorite: false,
+    description: '',
+    concluded: true,
+  },
+];
