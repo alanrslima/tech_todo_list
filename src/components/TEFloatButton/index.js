@@ -5,9 +5,7 @@ import { colors } from '../../styles';
 import styles from './styles';
 import PropTypes from 'prop-types';
 
-// import { Container } from './styles';
-
-function FloatButton({ onPress }) {
+function TEFloatButton({ onPress }) {
   return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
       <Icon name="plus" size={25} color={colors.WHITE} />
@@ -15,12 +13,12 @@ function FloatButton({ onPress }) {
   );
 }
 
-FloatButton.propTypes = {
+TEFloatButton.propTypes = {
   onPress: PropTypes.func,
 };
 
-FloatButton.defaultProps = {
+TEFloatButton.defaultProps = {
   onPress: () => {},
 };
 
-export default FloatButton;
+export default TEFloatButton;

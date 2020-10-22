@@ -1,33 +1,34 @@
 import React from 'react';
-import { View, TouchableOpacity, Text } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import styles from './styles';
 import Icon from 'react-native-vector-icons/Feather';
 import { colors } from '../../styles';
 import PropTypes from 'prop-types';
+import TEText from '../TEText';
 
-function Task({ concluded, name }) {
+function TETask({ concluded, name, onPress }) {
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity onPress={onPress} style={styles.container}>
       <View style={[styles.round, concluded && styles.roundConcluded]}>
         {concluded && <Icon name="check" color={colors.WHITE} size={15} />}
       </View>
       <View>
-        <Text style={[styles.title, concluded && styles.titleConcluded]}>
+        <TEText style={[styles.title, concluded && styles.titleConcluded]}>
           {name}
-        </Text>
+        </TEText>
       </View>
     </TouchableOpacity>
   );
 }
 
-Task.propTypes = {
+TETask.propTypes = {
   onPress: PropTypes.func,
   name: PropTypes.string,
 };
 
-Task.defaultProps = {
+TETask.defaultProps = {
   onPress: () => {},
   name: '',
 };
 
-export default Task;
+export default TETask;
