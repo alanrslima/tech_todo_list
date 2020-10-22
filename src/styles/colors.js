@@ -8,4 +8,6 @@ export default {
 
   GREY_LIGHT: '#EEEEEE',
   GREY: '#AAA',
+
+  RED: '#F00',
 };

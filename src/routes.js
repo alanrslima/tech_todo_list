@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import List from './pages/List';
 import Detail from './pages/Detail';
-import CreatTask from './pages/CreateTask';
+import CreateTask from './pages/CreateTask';
 
 const RootStack = createStackNavigator();
 function Routes() {
@@ -23,8 +23,8 @@ function Routes() {
         />
         <RootStack.Screen
           options={{ headerShown: false }}
-          name="CreatTask"
-          component={CreatTask}
+          name="CreateTask"
+          component={CreateTask}
         />
       </RootStack.Navigator>
     </NavigationContainer>
