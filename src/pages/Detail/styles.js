@@ -12,7 +12,8 @@ export default StyleSheet.create({
   },
   item: {
     flexDirection: 'row',
-    padding: 16,
+    paddingVertical: 16,
+    marginHorizontal: 16,
     alignItems: 'center',
     borderBottomWidth: 1,
   },
@@ -32,5 +33,8 @@ export default StyleSheet.create({
     width: 25,
     borderRadius: 15,
     borderWidth: 1,
+  },
+  containerButton: {
+    margin: 16,
   },
 });

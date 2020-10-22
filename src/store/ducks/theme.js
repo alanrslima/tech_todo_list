@@ -85,7 +85,7 @@ export const selectLightTheme = () => (dispatch) => {
     type: Types.HANDLE_THEME,
     payload: lightTheme,
   });
-  Storage.setStorageString(keys.CURRENT_THEME, lightTheme.type);
+  // Storage.setStorageString(keys.CURRENT_THEME, lightTheme.type);
 };
 
 export const selectDarkTheme = () => (dispatch) => {
@@ -93,5 +93,5 @@ export const selectDarkTheme = () => (dispatch) => {
     type: Types.HANDLE_THEME,
     payload: darkTheme,
   });
-  Storage.setStorageString(keys.CURRENT_THEME, darkTheme.type);
+  // Storage.setStorageString(keys.CURRENT_THEME, darkTheme.type);
 };

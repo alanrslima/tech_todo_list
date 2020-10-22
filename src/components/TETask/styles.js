@@ -4,9 +4,9 @@ import { colors, fonts } from '../../styles';
 export default StyleSheet.create({
   container: {
     flexDirection: 'row',
-    padding: 16,
+    paddingVertical: 16,
+    marginHorizontal: 16,
     borderBottomWidth: 1,
-    borderBottomColor: colors.GREY_LIGHT,
     alignItems: 'center',
   },
   round: {

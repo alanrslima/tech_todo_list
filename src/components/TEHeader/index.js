@@ -2,10 +2,12 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import styles from './styles';
-import { colors } from '~/styles';
 import TEText from '../TEText';
+import { useSelector } from 'react-redux';
 
 function TEHeader({ title, headerLeft, headerRight, color, tintColor }) {
+  const theme = useSelector((state) => state.theme.theme);
+
   return (
     <View style={[styles.container, { backgroundColor: color }]}>
       <View style={styles.content}>
@@ -15,7 +17,12 @@ function TEHeader({ title, headerLeft, headerRight, color, tintColor }) {
             font="medium"
             numberOfLines={1}
             allowFontScaling={false}
-            style={[styles.title, { color: tintColor }]}>
+            style={[
+              styles.title,
+              {
+                color: tintColor ? tintColor : theme.colors.onBackgroundPrimary,
+              },
+            ]}>
             {title}
           </TEText>
         </View>
@@ -39,7 +46,7 @@ TEHeader.defaultProps = {
   headerLeft: undefined,
   headerRight: undefined,
   color: 'transparent',
-  tintColor: colors.BLACK,
+  tintColor: undefined,
 };
 
 export default TEHeader;

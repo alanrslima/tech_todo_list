@@ -1,18 +1,41 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, TextInput, ScrollView } from 'react-native';
-import { useSelector } from 'react-redux';
+import {
+  View,
+  TouchableOpacity,
+  TextInput,
+  ScrollView,
+  Platform,
+  KeyboardAvoidingView,
+} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
+import IconAwesome from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
-import { TEHeader, TEHeaderButton, TEText, TEAlert } from '~/components';
+import {
+  TEHeader,
+  TEHeaderButton,
+  TEText,
+  TEAlert,
+  TEButton,
+} from '~/components';
 import { colors } from '~/styles';
+import { deleteTask } from '~/store/ducks/tasks';
 
 function Detail({ navigation, route }) {
   const theme = useSelector((state) => state.theme.theme);
+
   const { task } = route.params;
+  const dispatch = useDispatch();
 
   const [description, setDescription] = useState(task.description);
   const [name, setName] = useState(task.name);
   const [showAlert, setShowAlert] = useState(false);
+
+  async function removeTask() {
+    setShowAlert(false);
+    await dispatch(deleteTask(task.id));
+    navigation.goBack();
+  }
 
   return (
     <View
@@ -20,66 +43,89 @@ function Detail({ navigation, route }) {
       <TEHeader
         headerLeft={<TEHeaderButton type="back" onPress={navigation.goBack} />}
       />
-      <ScrollView
-        style={[styles.content, { backgroundColor: theme.colors.surface }]}>
-        <View
-          style={[
-            styles.item,
-            { borderBottomColor: theme.colors.onSurfaceDisable },
-          ]}>
+      <KeyboardAvoidingView
+        style={[styles.content, { backgroundColor: theme.colors.surface }]}
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}>
+        <ScrollView>
           <View
             style={[
-              styles.round,
-              { borderColor: theme.colors.onSurfaceSecundary },
-            ]}
-          />
-          <TextInput
-            style={styles.input}
-            onChangeText={(txt) => setName(txt)}
-            value={name}
-            multiline
-            maxLength={240}
-            placeholder="Nome da tarefa"
-          />
-        </View>
+              styles.item,
+              { borderBottomColor: theme.colors.onSurfaceDisable },
+            ]}>
+            <View
+              style={[
+                styles.round,
+                { borderColor: theme.colors.onSurfaceSecundary },
+              ]}
+            />
+            <TextInput
+              style={[styles.input, { color: theme.colors.onSurfacePrimary }]}
+              onChangeText={(txt) => setName(txt)}
+              value={name}
+              multiline
+              maxLength={240}
+              placeholderTextColor={theme.colors.onSurfaceSecundary}
+              placeholder="Digite o nome da tarefa"
+            />
+          </View>
 
-        <TouchableOpacity
-          style={[
-            styles.item,
-            { borderBottomColor: theme.colors.onSurfaceDisable },
-          ]}>
-          <Icon name="star" size={25} />
-          <TEText
-            style={[styles.itemText, { color: theme.colors.onSurfacePrimary }]}>
-            Favoritar tarefa
-          </TEText>
-        </TouchableOpacity>
-        <View
-          style={[
-            styles.item,
-            { borderBottomColor: theme.colors.onSurfaceDisable },
-          ]}>
-          <Icon name="align-left" size={25} />
-          <TextInput
-            style={styles.input}
-            onChangeText={(txt) => setDescription(txt)}
-            value={description}
-            multiline
-            placeholder="Incluir descrição"
+          <TouchableOpacity
+            style={[
+              styles.item,
+              { borderBottomColor: theme.colors.onSurfaceDisable },
+            ]}>
+            <IconAwesome
+              name={task.favorite ? 'star' : 'star-o'}
+              size={25}
+              color={theme.colors.onSurfacePrimary}
+            />
+            <TEText
+              style={[
+                styles.itemText,
+                { color: theme.colors.onSurfacePrimary },
+              ]}>
+              {task.favorite ? 'Desfavoritar tarefa' : 'Favoritar tarefa'}
+            </TEText>
+          </TouchableOpacity>
+          <View
+            style={[
+              styles.item,
+              { borderBottomColor: theme.colors.onSurfaceDisable },
+            ]}>
+            <Icon
+              name="align-left"
+              size={25}
+              color={theme.colors.onSurfacePrimary}
+            />
+            <TextInput
+              style={[styles.input, { color: theme.colors.onSurfacePrimary }]}
+              onChangeText={(txt) => setDescription(txt)}
+              value={description}
+              multiline
+              placeholder="Incluir descrição"
+            />
+          </View>
+          <TouchableOpacity
+            onPress={() => setShowAlert(true)}
+            style={[
+              styles.item,
+              { borderBottomColor: theme.colors.onSurfaceDisable },
+            ]}>
+            <Icon name="trash-2" size={25} color={colors.RED} />
+            <TEText style={[styles.itemText, { color: colors.RED }]}>
+              Apagar tarefa
+            </TEText>
+          </TouchableOpacity>
+        </ScrollView>
+        <View style={styles.containerButton}>
+          <TEButton
+            text="SALVAR"
+            // loading={loading}
+            disabled={!name.length}
+            // onPress={saveTask}
           />
         </View>
-        <TouchableOpacity
-          onPress={() => setShowAlert(true)}
-          style={[
-            styles.item,
-            { borderBottomColor: theme.colors.onSurfaceDisable },
-          ]}>
-          <Icon name="trash-2" size={25} color={colors.RED} />
-          <TEText style={[styles.itemText, { color: colors.RED }]}>
-            Apagar tarefa
-          </TEText>
-        </TouchableOpacity>
-      </ScrollView>
+      </KeyboardAvoidingView>
 
       <TEAlert
         title="Apagar tarefa"
@@ -87,8 +133,8 @@ function Detail({ navigation, route }) {
         visible={showAlert}
         onClose={() => setShowAlert(false)}
         buttons={[
-          { id: 'no', text: 'NÃO', onPress: () => {} },
-          { id: 'yes', text: 'SIM', onPress: () => {}, type: 'secundary' },
+          { id: 'no', text: 'NÃO', onPress: () => setShowAlert(false) },
+          { id: 'yes', text: 'SIM', onPress: removeTask, type: 'secundary' },
         ]}
       />
     </View>

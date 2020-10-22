@@ -10,12 +10,16 @@ import {
   TELoading,
   TEAlert,
   TEText,
+  TEHeaderButton,
 } from '~/components';
 import * as Animatable from 'react-native-animatable';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTasks } from '~/store/ducks/tasks';
+import { selectDarkTheme, selectLightTheme } from '~/store/ducks/theme';
 
 function List({ navigation }) {
+  const theme = useSelector((state) => state.theme.theme);
+
   const tasks = useSelector((state) => state.tasks.tasks);
   const tasksLoading = useSelector((state) => state.tasks.tasksLoading);
   const tasksError = useSelector((state) => state.tasks.tasksError);
@@ -42,7 +46,7 @@ function List({ navigation }) {
         animation="fadeInUpBig"
         iterationCount={1}>
         <FlatList
-          style={styles.list}
+          style={[styles.list, { backgroundColor: theme.colors.surface }]}
           keyExtractor={(item, index) => `${item.id}${index}`}
           data={tasks}
           renderItem={({ item }) => (
@@ -58,8 +62,21 @@ function List({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <TEHeader title="Tasks" />
+    <View
+      style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <TEHeader
+        headerLeft={
+          <TEHeaderButton
+            type={theme.type === 'light' ? 'dark-theme' : 'light-theme'}
+            onPress={
+              theme.type === 'light'
+                ? () => dispatch(selectDarkTheme())
+                : () => dispatch(selectLightTheme())
+            }
+          />
+        }
+        title="Tasks"
+      />
       {renderContent()}
       <TEFloatButton onPress={() => navigation.navigate('CreateTask')} />
       <TEAlert
