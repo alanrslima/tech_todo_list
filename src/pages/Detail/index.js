@@ -10,8 +10,8 @@ function Detail({ navigation, route }) {
   const theme = useSelector((state) => state.theme.theme);
   const { task } = route.params;
 
-  const [description, setDescription] = useState('');
-  const [name, setName] = useState('');
+  const [description, setDescription] = useState(task.description);
+  const [name, setName] = useState(task.name);
   const [showAlert, setShowAlert] = useState(false);
 
   return (

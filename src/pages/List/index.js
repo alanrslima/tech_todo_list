@@ -9,28 +9,32 @@ import {
   TETask,
   TELoading,
   TEAlert,
+  TEText,
 } from '~/components';
 import * as Animatable from 'react-native-animatable';
+import { useDispatch, useSelector } from 'react-redux';
+import { getTasks } from '~/store/ducks/tasks';
 
 function List({ navigation }) {
-  const todoList = mock;
-
-  const [loading, setLoading] = useState(false);
+  const tasks = useSelector((state) => state.tasks.tasks);
+  const tasksLoading = useSelector((state) => state.tasks.tasksLoading);
+  const tasksError = useSelector((state) => state.tasks.tasksError);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     getData();
   }, []);
 
   function getData() {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 5000);
+    dispatch(getTasks());
   }
 
   function renderContent() {
-    if (loading) {
+    if (tasksLoading) {
       return <TELoading />;
+    }
+    if (tasksError) {
+      return <TEText>Tela de error</TEText>;
     }
     return (
       <Animatable.View
@@ -40,7 +44,7 @@ function List({ navigation }) {
         <FlatList
           style={styles.list}
           keyExtractor={(item, index) => `${item.id}${index}`}
-          data={todoList}
+          data={tasks}
           renderItem={({ item }) => (
             <TETask
               onPress={() => navigation.navigate('Detail', { task: item })}

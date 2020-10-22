@@ -11,13 +11,24 @@ import styles from './styles';
 import { TEHeader, TEHeaderButton, TEButton } from '~/components';
 // import Modal from 'react-native-modal';
 // import { metrics } from '~/styles';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { createTask } from '~/store/ducks/tasks';
 
 function CreateTask({ navigation }) {
   const theme = useSelector((state) => state.theme.theme);
+  const loading = useSelector((state) => state.tasks.createTaskLoading);
+  const error = useSelector((state) => state.tasks.createTaskError);
 
   const [description, setDescription] = useState('');
+  const dispatch = useDispatch();
   const [name, setName] = useState('');
+
+  async function saveTask() {
+    await dispatch(createTask({ name, description }));
+    if (!error) {
+      navigation.goBack();
+    }
+  }
 
   return (
     <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
@@ -60,7 +71,12 @@ function CreateTask({ navigation }) {
           </View>
         </ScrollView>
         <View style={styles.containerButton}>
-          <TEButton text="SALVAR" />
+          <TEButton
+            text="SALVAR"
+            loading={loading}
+            disabled={!name.length}
+            onPress={saveTask}
+          />
         </View>
       </KeyboardAvoidingView>
     </View>

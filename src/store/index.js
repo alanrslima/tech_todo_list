@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import todoList from './ducks/todoList';
+import tasks from './ducks/tasks';
 import theme from './ducks/theme';
 
 export default combineReducers({
-  todoList,
+  tasks,
   theme,
 });
