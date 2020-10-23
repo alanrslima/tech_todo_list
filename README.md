@@ -2,7 +2,7 @@
 
 ## Preparação de Ambiente
 
-As seguintes ferramentas precisam estar instaladas em sua máquina para um correto funcionamento do servidor.
+As seguintes ferramentas precisam estar instaladas em sua máquina para um correto funcionamento do app.
 
 - [Yarn](https://classic.yarnpkg.com/pt-BR/docs/install/#mac-stable)
 - [React Native](https://reactnative.dev/docs/0.61/getting-started)
