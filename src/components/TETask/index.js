@@ -14,6 +14,7 @@ function TETask({
   onPress,
   onPressRadioButton,
   onPressFavorite,
+  onLongPress,
   favorite,
 }) {
   const theme = useSelector((state) => state.theme.theme);
@@ -21,6 +22,7 @@ function TETask({
   return (
     <TouchableOpacity
       onPress={onPress}
+      onLongPress={onLongPress}
       style={[
         styles.container,
         { borderBottomColor: theme.colors.onSurfaceDisable },
@@ -44,7 +46,7 @@ function TETask({
           {name}
         </TEText>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={onPressFavorite}>
         <IconAwesome
           name={favorite ? 'star' : 'star-o'}
           size={20}
@@ -61,6 +63,7 @@ TETask.propTypes = {
   onPressRadioButton: PropTypes.func,
   favorite: PropTypes.bool,
   onPressFavorite: PropTypes.func,
+  onLongPress: PropTypes.func,
 };
 
 TETask.defaultProps = {
@@ -69,6 +72,7 @@ TETask.defaultProps = {
   onPressRadioButton: () => {},
   favorite: false,
   onPressFavorite: () => {},
+  onLongPress: () => {},
 };
 
 export default TETask;

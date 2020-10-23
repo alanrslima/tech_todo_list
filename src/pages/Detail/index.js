@@ -19,7 +19,7 @@ import {
   TEButton,
 } from '~/components';
 import { colors, fonts } from '~/styles';
-import { deleteTask } from '~/store/ducks/tasks';
+import { deleteTask, editTask } from '~/store/ducks/tasks';
 
 function Detail({ navigation, route }) {
   const theme = useSelector((state) => state.theme.theme);
@@ -35,6 +35,10 @@ function Detail({ navigation, route }) {
     setShowAlert(false);
     await dispatch(deleteTask(task.id));
     navigation.goBack();
+  }
+
+  async function saveTask() {
+    await dispatch(editTask({ ...task, name, description }));
   }
 
   return (
@@ -130,7 +134,7 @@ function Detail({ navigation, route }) {
             // loading={loading}
             disabled={!name.length}
             type="secundary"
-            // onPress={saveTask}
+            onPress={saveTask}
           />
         </View>
       </KeyboardAvoidingView>

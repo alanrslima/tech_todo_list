@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, RefreshControl, SectionList } from 'react-native';
 
 import styles from './styles';
@@ -14,7 +14,7 @@ import {
 } from '~/components';
 import * as Animatable from 'react-native-animatable';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTasks } from '~/store/ducks/tasks';
+import { getTasks, editTask, deleteTask } from '~/store/ducks/tasks';
 import { Storage, keys } from '~/storage';
 import { selectDarkTheme, selectLightTheme } from '~/store/ducks/theme';
 
@@ -27,6 +27,12 @@ function List({ navigation }) {
   const tasksRefresh = useSelector((state) => state.tasks.tasksRefresh);
   const tasksError = useSelector((state) => state.tasks.tasksError);
   const dispatch = useDispatch();
+
+  const [editAlert, setEditAlert] = useState({
+    visible: false,
+    description: '',
+    buttons: [],
+  });
 
   useEffect(() => {
     getData();
@@ -49,6 +55,44 @@ function List({ navigation }) {
     dispatch(getTasks());
   }
 
+  function closeEditAlert() {
+    setEditAlert({ visible: false, buttons: [], description: '' });
+  }
+
+  function onLongPressTask(task) {
+    setEditAlert({
+      visible: true,
+      description: task.name,
+      buttons: [
+        {
+          id: '1',
+          text: task.concluded ? 'Deixar em aberto' : 'Marcar como concluído',
+          onPress: () => {
+            closeEditAlert();
+            dispatch(editTask({ ...task, concluded: !task.concluded }));
+          },
+        },
+        {
+          id: '2',
+          text: task.favorite ? 'Desfavoritar' : 'Favoritar',
+          onPress: () => {
+            closeEditAlert();
+            dispatch(editTask({ ...task, favorite: !task.favorite }));
+          },
+        },
+        {
+          id: '3',
+          type: 'secundary',
+          text: 'Apagar',
+          onPress: () => {
+            closeEditAlert();
+            dispatch(deleteTask(task.id));
+          },
+        },
+      ],
+    });
+  }
+
   function renderContent() {
     if (tasksLoading) {
       return <TELoading />;
@@ -60,7 +104,7 @@ function List({ navigation }) {
           description="Algo inesperado aconteceu, tente novamente mais tarde!"
           button="Tentar novamente"
           type="error"
-          onPressButton={() => navigation.navigate('CreateTask')}
+          onPressButton={() => dispatch(getTasks())}
         />
       );
     }
@@ -95,6 +139,13 @@ function List({ navigation }) {
             <TETask
               onPress={() => navigation.navigate('Detail', { task: item })}
               name={item.name}
+              onPressRadioButton={() =>
+                dispatch(editTask({ ...item, concluded: !item.concluded }))
+              }
+              onPressFavorite={() => {
+                dispatch(editTask({ ...item, favorite: !item.favorite }));
+              }}
+              onLongPress={() => onLongPressTask(item)}
               favorite={item.favorite}
               concluded={item.concluded}
             />
@@ -127,10 +178,11 @@ function List({ navigation }) {
       {renderContent()}
       <TEFloatButton onPress={() => navigation.navigate('CreateTask')} />
       <TEAlert
+        visible={editAlert.visible}
         title="Edição de tarefa"
-        // buttons={[
-        //   {id: 'concluded', }
-        // ]}
+        onClose={closeEditAlert}
+        description={editAlert.description}
+        buttons={editAlert.buttons}
       />
     </View>
   );
