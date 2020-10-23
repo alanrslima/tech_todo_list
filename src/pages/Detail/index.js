@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -11,34 +11,40 @@ import { useSelector, useDispatch } from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
 import IconAwesome from 'react-native-vector-icons/FontAwesome';
 import styles from './styles';
-import {
-  TEHeader,
-  TEHeaderButton,
-  TEText,
-  TEAlert,
-  TEButton,
-} from '~/components';
+import { TEHeader, TEHeaderButton, TEText, TEAlert } from '~/components';
 import { colors, fonts } from '~/styles';
 import { deleteTask, editTask } from '~/store/ducks/tasks';
+import { debounce } from 'lodash';
 
 function Detail({ navigation, route }) {
   const theme = useSelector((state) => state.theme.theme);
 
-  const { task } = route.params;
+  let { task } = route.params;
   const dispatch = useDispatch();
 
   const [description, setDescription] = useState(task.description);
   const [name, setName] = useState(task.name);
+  const [concluded, setConcluded] = useState(task.concluded);
+  const [favorite, setFavorite] = useState(task.favorite);
+
   const [showAlert, setShowAlert] = useState(false);
+
+  const debounceLoadString = useCallback(debounce(editTaskStrings, 1000), []);
+
+  useEffect(() => {
+    debounceLoadString({ name, description, favorite, concluded });
+  }, [name, description]);
+
+  function editTaskStrings(item) {
+    if (item.description !== description || item.name !== name) {
+      dispatch(editTask({ id: task.id, ...item }));
+    }
+  }
 
   async function removeTask() {
     setShowAlert(false);
     await dispatch(deleteTask(task.id));
     navigation.goBack();
-  }
-
-  async function saveTask() {
-    await dispatch(editTask({ ...task, name, description }));
   }
 
   return (
@@ -56,12 +62,28 @@ function Detail({ navigation, route }) {
               styles.item,
               { borderBottomColor: theme.colors.onSurfaceDisable },
             ]}>
-            <View
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(
+                  editTask({
+                    id: task.id,
+                    name,
+                    description,
+                    favorite,
+                    concluded: !concluded,
+                  }),
+                );
+                setConcluded(!concluded);
+              }}
               style={[
                 styles.round,
                 { borderColor: theme.colors.onSurfaceSecundary },
-              ]}
-            />
+                concluded && styles.roundConcluded,
+              ]}>
+              {concluded && (
+                <Icon name="check" color={colors.WHITE} size={15} />
+              )}
+            </TouchableOpacity>
             <TextInput
               style={[
                 styles.input,
@@ -69,33 +91,45 @@ function Detail({ navigation, route }) {
                   color: theme.colors.onSurfacePrimary,
                   fontSize: fonts.HEADLINE,
                 },
+                concluded && styles.inputConcluded,
               ]}
               onChangeText={(txt) => setName(txt)}
               value={name}
               multiline
               maxLength={240}
+              keyboardAppearance={theme.type}
               placeholderTextColor={theme.colors.onSurfaceSecundary}
               placeholder="Digite o nome da tarefa"
             />
           </View>
           <TouchableOpacity
+            onPress={() => {
+              setFavorite(!favorite);
+              dispatch(
+                editTask({
+                  id: task.id,
+                  name,
+                  description,
+                  concluded,
+                  favorite: !favorite,
+                }),
+              );
+            }}
             style={[
               styles.item,
               { borderBottomColor: theme.colors.onSurfaceDisable },
             ]}>
             <IconAwesome
-              name={task.favorite ? 'star' : 'star-o'}
+              name={favorite ? 'star' : 'star-o'}
               size={25}
-              color={
-                task.favorite ? colors.YELLOW : theme.colors.onSurfacePrimary
-              }
+              color={favorite ? colors.YELLOW : theme.colors.onSurfacePrimary}
             />
             <TEText
               style={[
                 styles.itemText,
                 { color: theme.colors.onSurfacePrimary },
               ]}>
-              {task.favorite ? 'Desfavoritar tarefa' : 'Favoritar tarefa'}
+              {favorite ? 'Desfavoritar tarefa' : 'Favoritar tarefa'}
             </TEText>
           </TouchableOpacity>
           <View
@@ -113,7 +147,9 @@ function Detail({ navigation, route }) {
               onChangeText={(txt) => setDescription(txt)}
               value={description}
               multiline
+              keyboardAppearance={theme.type}
               placeholder="Incluir descrição"
+              placeholderTextColor={theme.colors.onSurfaceSecundary}
             />
           </View>
           <TouchableOpacity
@@ -128,15 +164,6 @@ function Detail({ navigation, route }) {
             </TEText>
           </TouchableOpacity>
         </ScrollView>
-        <View style={styles.containerButton}>
-          <TEButton
-            text="SALVAR"
-            // loading={loading}
-            disabled={!name.length}
-            type="secundary"
-            onPress={saveTask}
-          />
-        </View>
       </KeyboardAvoidingView>
 
       <TEAlert

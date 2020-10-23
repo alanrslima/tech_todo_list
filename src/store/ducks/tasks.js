@@ -144,6 +144,10 @@ export const deleteTask = (id) => async (dispatch) => {
   }
 };
 
+/**
+ *
+ * @param {{ id: number, name: string, description: string, favorite: boolean}} task
+ */
 export const editTask = (task) => async (dispatch) => {
   try {
     dispatch({ type: Types.EDIT_TASK, payload: task });

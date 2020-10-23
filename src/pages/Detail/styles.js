@@ -34,8 +34,14 @@ export default StyleSheet.create({
     width: 25,
     borderRadius: 15,
     borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  containerButton: {
-    margin: 16,
+  roundConcluded: {
+    backgroundColor: colors.BLUE,
+    borderWidth: 0,
+  },
+  inputConcluded: {
+    textDecorationLine: 'line-through',
   },
 });
