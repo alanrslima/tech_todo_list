@@ -1,6 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '~/styles';
-import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 export default StyleSheet.create({
   container: {

@@ -23,6 +23,9 @@ export default StyleSheet.create({
     backgroundColor: colors.BLUE,
     borderWidth: 0,
   },
+  content: {
+    flex: 1,
+  },
   title: {
     fontSize: fonts.TITLE,
     color: colors.BLACK,

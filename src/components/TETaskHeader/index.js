@@ -3,13 +3,20 @@ import { View } from 'react-native';
 import { TEText } from '..';
 
 import styles from './styles';
+import { useSelector } from 'react-redux';
 
 function TETaskHeader({ title }) {
+  const theme = useSelector((state) => state.theme.theme);
+
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
+    <View style={[styles.container, { backgroundColor: theme.colors.surface }]}>
+      <View
+        style={[
+          styles.content,
+          { backgroundColor: theme.colors.onSurfaceDisable },
+        ]}>
         <TEText font="bold" style={styles.title}>
-          Seg, 3 de out
+          {title}
         </TEText>
       </View>
     </View>

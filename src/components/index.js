@@ -7,6 +7,7 @@ import TETaskHeader from './TETaskHeader';
 import TELoading from './TELoading';
 import TEButton from './TEButton';
 import TEAlert from './TEAlert';
+import TEContentAlert from './TEContentAlert';
 
 export {
   TEFloatButton,
@@ -18,4 +19,5 @@ export {
   TELoading,
   TEAlert,
   TEButton,
+  TEContentAlert,
 };

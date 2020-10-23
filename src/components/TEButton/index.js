@@ -41,16 +41,28 @@ function TEButton({ text, onPress, type, disabled, loading }) {
       return {
         button: [
           styles.container,
-          { borderWidth: 1, borderColor: theme.colors.onButtonPrimary },
+          {
+            borderWidth: 1,
+            borderColor: statusDisabled
+              ? theme.colors.onButtonDisable
+              : theme.colors.onButtonSecundary,
+          },
         ],
-        text: { color: theme.colors.onButtonPrimary },
+        text: {
+          color: statusDisabled
+            ? theme.colors.onButtonDisable
+            : theme.colors.onButtonSecundary,
+        },
       };
     }
     return {};
   }
 
   return (
-    <TouchableOpacity style={checkStyle().button} onPress={onPress}>
+    <TouchableOpacity
+      disabled={checkDisabled()}
+      style={checkStyle().button}
+      onPress={onPress}>
       {loading ? (
         <ActivityIndicator />
       ) : (

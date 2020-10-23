@@ -1,6 +1,5 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import { StatusBar, Platform } from 'react-native';
 
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';

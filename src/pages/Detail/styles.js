@@ -10,6 +10,7 @@ export default StyleSheet.create({
     borderTopLeftRadius: 40,
     borderTopRightRadius: 40,
   },
+
   item: {
     flexDirection: 'row',
     paddingVertical: 16,

@@ -18,7 +18,7 @@ import {
   TEAlert,
   TEButton,
 } from '~/components';
-import { colors } from '~/styles';
+import { colors, fonts } from '~/styles';
 import { deleteTask } from '~/store/ducks/tasks';
 
 function Detail({ navigation, route }) {
@@ -59,7 +59,13 @@ function Detail({ navigation, route }) {
               ]}
             />
             <TextInput
-              style={[styles.input, { color: theme.colors.onSurfacePrimary }]}
+              style={[
+                styles.input,
+                {
+                  color: theme.colors.onSurfacePrimary,
+                  fontSize: fonts.HEADLINE,
+                },
+              ]}
               onChangeText={(txt) => setName(txt)}
               value={name}
               multiline
@@ -68,7 +74,6 @@ function Detail({ navigation, route }) {
               placeholder="Digite o nome da tarefa"
             />
           </View>
-
           <TouchableOpacity
             style={[
               styles.item,
@@ -77,7 +82,9 @@ function Detail({ navigation, route }) {
             <IconAwesome
               name={task.favorite ? 'star' : 'star-o'}
               size={25}
-              color={theme.colors.onSurfacePrimary}
+              color={
+                task.favorite ? colors.YELLOW : theme.colors.onSurfacePrimary
+              }
             />
             <TEText
               style={[
@@ -122,6 +129,7 @@ function Detail({ navigation, route }) {
             text="SALVAR"
             // loading={loading}
             disabled={!name.length}
+            type="secundary"
             // onPress={saveTask}
           />
         </View>

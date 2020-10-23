@@ -1,6 +1,5 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { colors, fonts } from '~/styles';
-import { getBottomSpace } from 'react-native-iphone-x-helper';
 
 export default StyleSheet.create({
   modal: {
@@ -21,7 +20,6 @@ export default StyleSheet.create({
   content: {
     backgroundColor: colors.WHITE,
     padding: 16,
-    // marginBottom: Platform.OS === 'ios' ? getBottomSpace() + 16 : 16,
     borderRadius: 10,
   },
   containerButton: {

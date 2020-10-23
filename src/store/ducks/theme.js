@@ -6,7 +6,7 @@ const lightTheme = {
   type: 'light',
   colors: {
     background: '#D3E3F1',
-    onBackgroundPrimary: '#000',
+    onBackgroundPrimary: '#306EA1',
     onBackgroundSecundary: '#4992D0',
     onBackgroundDisable: 'rgba(0,0,0,0.15)',
 
@@ -23,8 +23,8 @@ const lightTheme = {
 
     button: '#D9EAF9',
     onButtonPrimary: '#4992D0',
-    onButtonSecundary: '',
-    onButtonDisable: '#888',
+    onButtonSecundary: '#4992D0',
+    onButtonDisable: 'rgba(0,0,0,0.08)',
 
     input: '#EEE',
     onInputPrimary: '#000000',
@@ -39,10 +39,10 @@ const darkTheme = {
     onBackgroundSecundary: 'rgba(255,255,255,0.7)',
     onBackgroundDisable: 'rgba(255,255,255,0.20)',
 
-    surface: '#303030',
+    surface: '#202020',
     onSurfacePrimary: 'rgba(255,255,255,1)',
     onSurfaceSecundary: 'rgba(255,255,255,0.7)',
-    onSurfaceDisable: 'rgba(255,255,255,0.20)',
+    onSurfaceDisable: 'rgba(255,255,255,0.1)',
 
     backgroundIcon: '#404040',
 
@@ -50,10 +50,10 @@ const darkTheme = {
     onSelectionPrimary: '#FFFFFF',
     onSelectionSecundary: 'rgba(255,255,255,0.7)',
 
-    button: '#306EA1',
-    onButtonPrimary: '#FFFFFF',
-    onButtonSecundary: '',
-    onButtonDisable: '',
+    button: '#DDD',
+    onButtonPrimary: '#000000',
+    onButtonSecundary: '#DDD',
+    onButtonDisable: 'rgba(255,255,255,0.2)',
 
     input: '#222',
     onInputPrimary: '#FFFFFF',
@@ -85,7 +85,7 @@ export const selectLightTheme = () => (dispatch) => {
     type: Types.HANDLE_THEME,
     payload: lightTheme,
   });
-  // Storage.setStorageString(keys.CURRENT_THEME, lightTheme.type);
+  Storage.setStorageString(keys.CURRENT_THEME, lightTheme.type);
 };
 
 export const selectDarkTheme = () => (dispatch) => {
@@ -93,5 +93,5 @@ export const selectDarkTheme = () => (dispatch) => {
     type: Types.HANDLE_THEME,
     payload: darkTheme,
   });
-  // Storage.setStorageString(keys.CURRENT_THEME, darkTheme.type);
+  Storage.setStorageString(keys.CURRENT_THEME, darkTheme.type);
 };

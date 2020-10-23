@@ -4,7 +4,7 @@ import { colors, fonts } from '../../styles';
 export default StyleSheet.create({
   container: {
     flexDirection: 'row',
-    margin: 16,
+    padding: 16,
   },
   content: {
     paddingHorizontal: 16,

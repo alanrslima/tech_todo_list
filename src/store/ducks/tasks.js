@@ -17,6 +17,7 @@ export const Types = {
 // Reducer
 const INITIAL_STATE = {
   tasks: [],
+  tasksEmpty: false,
   tasksLoading: false,
   tasksRefresh: false,
   tasksError: null,
@@ -37,6 +38,7 @@ export default (state = INITIAL_STATE, action) => {
         tasksLoading: false,
         tasksError: null,
         tasksRefresh: false,
+        tasksEmpty: action.payload.length ? false : true,
       };
     case Types.GET_TASKS_LOADING:
       return { ...state, tasksLoading: action.payload };
@@ -66,20 +68,36 @@ export const getTasks = (refresh = false) => async (dispatch) => {
       dispatch({ type: Types.GET_TASKS_LOADING, payload: true });
     }
     const response = await api.get('tasks');
-    dispatch({ type: Types.GET_TASKS, payload: response.data });
+    const concludedArray = [];
+    const openArray = [];
+    for (let i = 0; i < response.data.length; i += 1) {
+      if (response.data[i].concluded) {
+        concludedArray.push(response.data[i]);
+      } else {
+        openArray.push(response.data[i]);
+      }
+    }
+    const data = [
+      { title: 'Em aberto', data: openArray },
+      { title: 'Concluídas', data: concludedArray },
+    ];
+
+    dispatch({ type: Types.GET_TASKS, payload: data });
   } catch (error) {
     dispatch({ type: Types.GET_TASKS_ERROR });
   }
 };
 
-export const createTask = (body) => async (dispatch) => {
+export const createTask = (body, callback = () => {}) => async (dispatch) => {
   try {
     dispatch({ type: Types.CREATE_TASK_LOADING, payload: true });
     dispatch({ type: Types.CREATE_TASK_ERROR, payload: false });
     await api.post('tasks', body);
     dispatch(getTasks());
     dispatch({ type: Types.CREATE_TASK_LOADING, payload: false });
+    callback(false);
   } catch (error) {
+    callback(error);
     dispatch({ type: Types.CREATE_TASK_LOADING, payload: false });
     dispatch({ type: Types.CREATE_TASK_ERROR, payload: true });
   }

@@ -10,4 +10,5 @@ export default {
   GREY: '#AAA',
 
   RED: '#F00',
+  YELLOW: '#FED000',
 };
